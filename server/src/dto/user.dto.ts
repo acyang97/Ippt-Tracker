@@ -34,3 +34,15 @@ export class CreateUserDto {
   @IsNotEmpty()
   confirmPassword: String;
 }
+
+export class LoginUserDto {
+  @IsEmail()
+  @IsDefined()
+  @IsNotEmpty()
+  email: String;
+
+  @MinLength(6)
+  @IsDefined()
+  @IsNotEmpty()
+  password: String;
+}

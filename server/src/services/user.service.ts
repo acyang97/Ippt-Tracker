@@ -1,5 +1,8 @@
 import { Response } from "express";
 import User from "../models/User.schema";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import config from "config";
 
 export const createUser = async (
   name: String,
@@ -21,8 +24,27 @@ export const createUser = async (
     }
     user = new User({ name, email, age, password });
 
+    // encrypt the password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password.toString(), salt);
+
     await user.save();
-    res.json(user);
+
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+
+    jwt.sign(
+      payload,
+      config.get("jwtSecret"),
+      { expiresIn: 360000 },
+      (err, token: String) => {
+        if (err) throw err;
+        res.json({ token });
+      }
+    );
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");

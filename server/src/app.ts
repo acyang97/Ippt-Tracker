@@ -1,6 +1,7 @@
 import express, { Application, NextFunction, Request, Response } from "express";
 import { connectDB } from "../config/db";
 import userRoutes from "./controllers/user.controller";
+import authRoutes from "./controllers/auth.controller";
 
 // import connect to db
 
@@ -15,7 +16,8 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
 });
 
 app.use("/ippt-tracker/users", userRoutes);
+app.use("/ippt-tracker/auth", authRoutes);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(5000, () => console.log("server running"));
+app.listen(PORT, () => console.log("server running"));
