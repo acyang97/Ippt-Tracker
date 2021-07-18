@@ -1,8 +1,4 @@
 import express, { Request, Response } from "express";
-import User from "../models/User.schema";
-import jwt from "jsonwebtoken";
-import config from "config";
-import bcrypt from "bcryptjs";
 import { LoginUserDto } from "../dto/user.dto";
 import { validateAndConvert } from "../middleware/validateAndConvert";
 import { loginUser } from "../services/auth.service";

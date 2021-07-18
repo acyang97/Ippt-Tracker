@@ -5,10 +5,6 @@ import { createUser } from "../services/user.service";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.json("works");
-});
-
 router.post("/", async (req: Request, res: Response) => {
   const { body } = req;
   const { error } = await validateAndConvert(CreateUserDto, body);
