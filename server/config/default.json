@@ -1,0 +1,6 @@
+{
+    "mongoURI": "mongodb+srv://admin:admin@cluster0.r3p6b.mongodb.net/IpptDatabase?retryWrites=true&w=majority",
+    "jwtSecret": "mysecrettoken",
+    "githubClientId": "d716feff70526e3cbc4a",
+    "githubToken": "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"
+}
