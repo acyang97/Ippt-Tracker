@@ -9,15 +9,15 @@ import store from "./store";
 const App: React.FC = () => {
   return (
     <Provider store={store}>
-      <React.Fragment>
-        <Router>
+      <Router>
+        <React.Fragment>
           <Route exact path="/" component={Landing} />
           <Switch>
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
           </Switch>
-        </Router>
-      </React.Fragment>
+        </React.Fragment>
+      </Router>
     </Provider>
   );
 };

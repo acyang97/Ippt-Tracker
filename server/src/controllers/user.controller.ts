@@ -8,6 +8,8 @@ const router = express.Router();
 router.post("/", async (req: Request, res: Response) => {
   const { body } = req;
   const { error } = await validateAndConvert(CreateUserDto, body);
+  console.log(body);
+  console.log(error);
   if (error) {
     return res.status(400).send(error);
   }

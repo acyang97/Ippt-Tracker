@@ -36,6 +36,11 @@ const useStyles = makeStyles((theme) => ({
 const Login: React.FC = () => {
   const classes = useStyles();
 
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Logging in");
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -46,7 +51,7 @@ const Login: React.FC = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={onSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -89,7 +94,7 @@ const Login: React.FC = () => {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/register" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

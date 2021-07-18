@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -9,6 +9,9 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import { register, test } from "../../actions/auth";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 function Copyright() {
   return (
@@ -43,8 +46,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Register: React.FC = () => {
+const Register = (props: {
+  register: (
+    name: String,
+    email: String,
+    password: String,
+    confirmPassword: String,
+    age: Number
+  ) => any;
+}) => {
+  const { register } = props;
   const classes = useStyles();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    age: 0,
+    password: "",
+    confirmPassword: "",
+  });
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  const { name, email, password, confirmPassword, age } = formData;
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      console.log("lalala");
+      return;
+    }
+    console.log("before register");
+    register(name, email, password, confirmPassword, age);
+    console.log("after register");
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -55,7 +92,8 @@ const Register: React.FC = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+
+        <form className={classes.form} onSubmit={(e) => onSubmit(e)}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -65,6 +103,9 @@ const Register: React.FC = () => {
                 id="name"
                 label="Full Name"
                 name="name"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  onChange(e)
+                }
               />
             </Grid>
             <Grid item xs={12}>
@@ -75,7 +116,23 @@ const Register: React.FC = () => {
                 id="email"
                 label="Email Address"
                 name="email"
-                autoComplete="email"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  onChange(e)
+                }
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="age"
+                label="Age"
+                type="number"
+                id="age"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  onChange(e)
+                }
               />
             </Grid>
             <Grid item xs={12}>
@@ -87,7 +144,23 @@ const Register: React.FC = () => {
                 label="Password"
                 type="password"
                 id="password"
-                autoComplete="current-password"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  onChange(e)
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                id="confirmPassword"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  onChange(e)
+                }
               />
             </Grid>
           </Grid>
@@ -102,7 +175,7 @@ const Register: React.FC = () => {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/login" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
@@ -115,4 +188,9 @@ const Register: React.FC = () => {
     </Container>
   );
 };
-export default Register;
+
+Register.propTypes = {
+  register: PropTypes.func.isRequired,
+};
+
+export default connect(null, { register, test })(Register);
