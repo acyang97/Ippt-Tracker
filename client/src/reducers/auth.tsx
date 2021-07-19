@@ -8,16 +8,30 @@ import {
   LOGOUT,
 } from "../actions/types";
 
-const initialState = {
+export interface AuthState {
+  token: String | null;
+  isAuthenticated: boolean | null;
+  user: IUser | null;
+}
+
+export interface IUser {
+  name: String;
+  email: String;
+  password: String;
+  age: Number;
+}
+
+const initialState: AuthState = {
   token: localStorage.getItem("token"),
   isAuthenticated: null, // to set true or false
-  loading: true, // want to make sure that loading is done and get a response
+  // loading: true,
+  user: null, // want to make sure that loading is done and get a response
 };
 
 const authReducer = (
   state = initialState,
   action: { type: any; payload: any }
-) => {
+): AuthState => {
   const { type, payload } = action;
   switch (type) {
     case REGISTER_SUCCESS:
@@ -38,7 +52,6 @@ const authReducer = (
       return {
         ...state,
         isAuthenticated: true,
-        loading: false,
         user: payload, // the output
       };
     case AUTH_ERROR:

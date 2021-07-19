@@ -8,24 +8,23 @@ import { UserModel } from "../interfaces/user.interface";
 
 const router = express.Router();
 
+interface UserAuthRequest extends Request {
+  user: UserModel;
+}
 // @route  GET ippt-tracker/auth;
 // @desc   TEST route
 // @access public
 // put middle ware as second argument
-router.get(
-  "/",
-  auth,
-  async (req: Request & { user: UserModel }, res: Response) => {
-    try {
-      // protected route
-      const user = await User.findById(req.user.id).select("-password");
-      res.json(user);
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("server error");
-    }
+router.get("/", auth, async (req: UserAuthRequest, res: Response) => {
+  try {
+    // protected route
+    const user = await User.findById(req.user.id).select("-password");
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("server error");
   }
-);
+});
 
 // @route  POST ippt-tracker/auth
 // @desc   Authenticate user & get token

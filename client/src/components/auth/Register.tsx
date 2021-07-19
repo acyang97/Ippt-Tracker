@@ -9,9 +9,11 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { register, test } from "../../actions/auth";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import { useSelector, useDispatch } from "react-redux";
+import { bindActionCreators } from "redux";
+import { Redirect } from "react-router-dom";
+import { RootState } from "../../reducers/index";
+import { authActionCreators } from "../../actions/index";
 
 function Copyright() {
   return (
@@ -46,17 +48,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Register = (props: {
-  register: (
-    name: String,
-    email: String,
-    password: String,
-    confirmPassword: String,
-    age: Number
-  ) => any;
-}) => {
-  const { register } = props;
+const Register = () => {
   const classes = useStyles();
+  const state = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated } = state;
+  const dispatch = useDispatch();
+  const { register } = bindActionCreators(authActionCreators, dispatch);
+  // const { register, isAuthenticated } = props;
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -78,10 +76,12 @@ const Register = (props: {
       console.log("lalala");
       return;
     }
-    console.log("before register");
     register(name, email, password, confirmPassword, age);
-    console.log("after register");
   };
+
+  if (isAuthenticated) {
+    return <Redirect to="/landing" />;
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -189,8 +189,4 @@ const Register = (props: {
   );
 };
 
-Register.propTypes = {
-  register: PropTypes.func.isRequired,
-};
-
-export default connect(null, { register, test })(Register);
+export default Register;

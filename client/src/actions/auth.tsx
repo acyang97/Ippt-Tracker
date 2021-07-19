@@ -6,14 +6,11 @@ import {
   LOGIN_FAIL,
   LOGIN_SUCCESS,
   LOGOUT,
+  USER_LOADED,
+  AUTH_ERROR,
 } from "./types";
 import setAuthToken from "../utils/setAuthToken";
 
-export const test =
-  (name: String, email: String, password: String, age: Number) =>
-  async (dispatch: Dispatch) => {
-    console.log("testing");
-  };
 // REGISTER USER
 export const register =
   (
@@ -43,7 +40,7 @@ export const register =
         type: REGISTER_SUCCESS,
         payload: res.data,
       });
-      //   dispatch(loadUser());
+      dispatch(loadUser() as any);
     } catch (err) {
       console.log(err.message);
       //   const errors = err.response.data.errors;
@@ -69,7 +66,7 @@ export const login =
     try {
       // WE WANT TO LOGIN
       console.log(body);
-      const res = await axios.post("/api/auth", body, config);
+      const res = await axios.post("/ippt-tracker/auth", body, config);
       dispatch({
         type: LOGIN_SUCCESS,
         payload: res.data,
@@ -88,21 +85,22 @@ export const login =
   };
 
 export const loadUser = () => async (dispatch: Dispatch) => {
-  // check local storage
+  // check local storage, set the new token
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
   try {
-    const res = await axios.get("/api/auth");
+    const res = await axios.get("/ippt-tracker/auth");
     console.log(res.data);
-    // dispatch({
-    //   type: USER_LOADED,
-    //   payload: res.data,
-    // });
+    // payload is the user information
+    dispatch({
+      type: USER_LOADED,
+      payload: res.data,
+    });
   } catch (err) {
-    // dispatch({
-    //   type: AUTH_ERROR,
-    // });
+    dispatch({
+      type: AUTH_ERROR,
+    });
   }
 };
 
