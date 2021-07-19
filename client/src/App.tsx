@@ -8,6 +8,7 @@ import store from "./store";
 import setAuthToken from "./utils/setAuthToken";
 import { loadUser } from "./action-creators/auth";
 import Navbar from "./components/layout/NavBar";
+import PrivateRoute from "./utils/PrivateRoute";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -22,7 +23,7 @@ const App: React.FC = () => {
       <Navbar />
       <Router>
         <React.Fragment>
-          <Route exact path="/landing" component={Landing} />
+          <PrivateRoute exact path="/landing" component={Landing} />
           <Switch>
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />

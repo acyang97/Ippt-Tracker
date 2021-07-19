@@ -54,7 +54,6 @@ const Register = () => {
   const { isAuthenticated } = state;
   const dispatch = useDispatch();
   const { register } = bindActionCreators(authActionCreators, dispatch);
-  // const { register, isAuthenticated } = props;
   const [formData, setFormData] = useState({
     name: "",
     email: "",

@@ -4,8 +4,13 @@ import jwt from "jsonwebtoken";
 import config from "config";
 import bcrypt from "bcryptjs";
 import { UserModel } from "../interfaces/user.interface";
+import { AuthError } from "../interfaces/erros.interface";
 
-export const loginUser = async (req: Request, res: Response) => {
+// TODO: figure out how to make the return type
+export const loginUser = async (
+  req: Request,
+  res: Response
+): Promise<Response<{ token: string } | AuthError>> => {
   const { email, password } = req.body;
   try {
     // If user exists, send error

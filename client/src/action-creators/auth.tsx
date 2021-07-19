@@ -2,6 +2,10 @@ import axios from "axios";
 import { Dispatch } from "redux";
 import { authActionTypes } from "../action-types/auth.action-types";
 import {
+  AuthErrorAction,
+  LoadUserAction,
+  LoginFailAction,
+  LoginSuccessAction,
   LogoutAction,
   RegisterFailAction,
   RegisterSucessAction,
@@ -51,7 +55,8 @@ export const register =
 
 // LOGIN USER
 export const login =
-  (email: string, password: string) => async (dispatch: Dispatch) => {
+  (email: string, password: string) =>
+  async (dispatch: Dispatch<LoginSuccessAction | LoginFailAction>) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -66,7 +71,7 @@ export const login =
         type: authActionTypes.LOGIN_SUCCESS,
         payload: res.data,
       });
-      // dispatch(loadUser());
+      dispatch(loadUser() as any);
     } catch (err) {
       console.log(err.message);
       // const errors = err.response.data.errors;
@@ -79,25 +84,26 @@ export const login =
     }
   };
 
-export const loadUser = () => async (dispatch: Dispatch) => {
-  // check local storage, set the new token
-  if (localStorage.token) {
-    setAuthToken(localStorage.token);
-  }
-  try {
-    const res = await axios.get("/ippt-tracker/auth");
-    console.log(res.data);
-    // payload is the user information
-    dispatch({
-      type: authActionTypes.USER_LOADED,
-      payload: res.data,
-    });
-  } catch (err) {
-    dispatch({
-      type: authActionTypes.AUTH_ERROR,
-    });
-  }
-};
+export const loadUser =
+  () => async (dispatch: Dispatch<LoadUserAction | AuthErrorAction>) => {
+    // check local storage, set the new token
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
+    try {
+      const res = await axios.get("/ippt-tracker/auth");
+      console.log(res.data);
+      // payload is the user information
+      dispatch({
+        type: authActionTypes.USER_LOADED,
+        payload: res.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: authActionTypes.AUTH_ERROR,
+      });
+    }
+  };
 
 export const logout = () => (dispatch: Dispatch<LogoutAction>) => {
   dispatch({ type: authActionTypes.LOGOUT });

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,6 +12,11 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../reducers";
+import { bindActionCreators } from "redux";
+import { authActionCreators } from "../../action-creators";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,11 +40,29 @@ const useStyles = makeStyles((theme) => ({
 
 const Login: React.FC = () => {
   const classes = useStyles();
+  const state = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated } = state;
+  const dispatch = useDispatch();
+  const { login } = bindActionCreators(authActionCreators, dispatch);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Logging in");
+    login(formData.email, formData.password);
   };
+
+  if (isAuthenticated) {
+    return <Redirect to="/landing" />;
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -60,8 +83,7 @@ const Login: React.FC = () => {
             id="email"
             label="Email Address"
             name="email"
-            autoComplete="email"
-            autoFocus
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
           />
           <TextField
             variant="outlined"
@@ -72,7 +94,7 @@ const Login: React.FC = () => {
             label="Password"
             type="password"
             id="password"
-            autoComplete="current-password"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}

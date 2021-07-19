@@ -5,6 +5,7 @@ import { loginUser } from "../services/auth.service";
 import { auth } from "../middleware/auth";
 import User from "../models/User.schema";
 import { UserModel } from "../interfaces/user.interface";
+import { AuthError } from "../interfaces/erros.interface";
 
 const router = express.Router();
 
@@ -29,13 +30,19 @@ router.get("/", auth, async (req: UserAuthRequest, res: Response) => {
 // @route  POST ippt-tracker/auth
 // @desc   Authenticate user & get token
 // @access public
-router.post("/", async (req: Request, res: Response) => {
-  const { body } = req;
-  const { error } = await validateAndConvert(LoginUserDto, body);
-  if (error) {
-    return res.status(400).send(error);
+router.post(
+  "/",
+  async (
+    req: Request,
+    res: Response
+  ): Promise<Response<{ token: string } | AuthError>> => {
+    const { body } = req;
+    const { error } = await validateAndConvert(LoginUserDto, body);
+    if (error) {
+      return res.status(400).send(error);
+    }
+    await loginUser(req, res);
   }
-  await loginUser(req, res);
-});
+);
 
 export default router;

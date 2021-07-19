@@ -3,6 +3,7 @@ import { authActionTypes } from "../action-types/auth.action-types";
 export interface AuthState {
   token: String | null;
   isAuthenticated: boolean | null;
+  isLoading: boolean;
   user: IUser | null;
 }
 
@@ -16,7 +17,7 @@ export interface IUser {
 const initialState: AuthState = {
   token: localStorage.getItem("token"),
   isAuthenticated: null, // to set true or false
-  // loading: true,
+  isLoading: true,
   user: null, // want to make sure that loading is done and get a response
 };
 
@@ -32,6 +33,7 @@ const authReducer = (
         ...state,
         ...payload,
         isAuthenticated: true,
+        isLoading: false,
       };
     case authActionTypes.REGISTER_FAIL:
       localStorage.removeItem("token");
@@ -39,12 +41,15 @@ const authReducer = (
         ...state,
         token: null,
         isAuthenticated: false,
+        user: null,
+        isLoading: false,
       };
     case authActionTypes.USER_LOADED:
       return {
         ...state,
         isAuthenticated: true,
         user: payload, // the output
+        isLoading: false,
       };
     case authActionTypes.AUTH_ERROR:
       localStorage.removeItem("token");
@@ -52,6 +57,7 @@ const authReducer = (
         ...state,
         token: null,
         isAuthenticated: false,
+        isLoading: false,
       };
     case authActionTypes.LOGIN_SUCCESS:
       localStorage.setItem("token", payload.token);
@@ -59,6 +65,7 @@ const authReducer = (
         ...state,
         ...payload,
         isAuthenticated: true,
+        isLoading: false,
       };
     case authActionTypes.LOGIN_FAIL:
       localStorage.removeItem("token");
@@ -66,6 +73,8 @@ const authReducer = (
         ...state,
         token: null,
         isAuthenticated: false,
+        user: null,
+        isLoading: false,
       };
     case authActionTypes.LOGOUT:
       localStorage.removeItem("token");
@@ -73,6 +82,8 @@ const authReducer = (
         ...state,
         token: null,
         isAuthenticated: false,
+        user: null,
+        isLoading: false,
       };
     default:
       return state;

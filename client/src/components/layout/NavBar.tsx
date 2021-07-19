@@ -9,6 +9,7 @@ import { RootState } from "../../reducers";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { authActionCreators } from "../../action-creators";
+import React from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,10 +27,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const NavBar = () => {
   const classes = useStyles();
-  const isAuthenticated = useSelector((state: RootState) => state.auth);
-  // const { isAuthenticated } = state;
+  const { isAuthenticated, isLoading } = useSelector(
+    (state: RootState) => state.auth
+  );
   const dispatch = useDispatch();
-  const { logout, register } = bindActionCreators(authActionCreators, dispatch);
+  const { logout } = bindActionCreators(authActionCreators, dispatch);
 
   const logoutUser = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -51,10 +53,14 @@ const NavBar = () => {
           <Typography variant="h6" className={classes.title}>
             News
           </Typography>
-          {isAuthenticated && (
-            <Button color="inherit" onClick={(e) => logoutUser(e)}>
-              Logout
-            </Button>
+          {!isLoading && (
+            <React.Fragment>
+              {isAuthenticated && (
+                <Button color="inherit" onClick={(e) => logoutUser(e)}>
+                  Logout
+                </Button>
+              )}
+            </React.Fragment>
           )}
         </Toolbar>
       </AppBar>

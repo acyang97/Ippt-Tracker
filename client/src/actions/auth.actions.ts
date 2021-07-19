@@ -15,6 +15,7 @@ export interface UserLoadedAction {
 
 export interface LoginSuccessAction {
   type: authActionTypes.LOGIN_SUCCESS;
+  payload: { token: string };
 }
 
 export interface LoginFailAction {
@@ -25,10 +26,20 @@ export interface LogoutAction {
   type: authActionTypes.LOGOUT;
 }
 
+export interface LoadUserAction {
+  type: authActionTypes.USER_LOADED;
+}
+
+export interface AuthErrorAction {
+  type: authActionTypes.AUTH_ERROR;
+}
+
 export type AuthAction =
   | RegisterSucessAction
   | RegisterFailAction
   | UserLoadedAction
   | LoginSuccessAction
   | LoginFailAction
-  | LogoutAction;
+  | LogoutAction
+  | LoadUserAction
+  | AuthErrorAction;
