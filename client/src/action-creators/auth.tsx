@@ -1,14 +1,11 @@
 import axios from "axios";
 import { Dispatch } from "redux";
+import { authActionTypes } from "../action-types/auth.action-types";
 import {
-  REGISTER_FAIL,
-  REGISTER_SUCCESS,
-  LOGIN_FAIL,
-  LOGIN_SUCCESS,
-  LOGOUT,
-  USER_LOADED,
-  AUTH_ERROR,
-} from "./types";
+  LogoutAction,
+  RegisterFailAction,
+  RegisterSucessAction,
+} from "../actions/auth.actions";
 import setAuthToken from "../utils/setAuthToken";
 
 // REGISTER USER
@@ -20,8 +17,7 @@ export const register =
     confirmPassword: String,
     age: Number
   ) =>
-  async (dispatch: Dispatch) => {
-    console.log("registering");
+  async (dispatch: Dispatch<RegisterSucessAction | RegisterFailAction>) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -37,7 +33,7 @@ export const register =
     try {
       const res = await axios.post("/ippt-tracker/users", body, config);
       dispatch({
-        type: REGISTER_SUCCESS,
+        type: authActionTypes.REGISTER_SUCCESS,
         payload: res.data,
       });
       dispatch(loadUser() as any);
@@ -48,7 +44,7 @@ export const register =
       //     errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
       //   }
       dispatch({
-        type: REGISTER_FAIL,
+        type: authActionTypes.REGISTER_FAIL,
       });
     }
   };
@@ -65,10 +61,9 @@ export const login =
 
     try {
       // WE WANT TO LOGIN
-      console.log(body);
       const res = await axios.post("/ippt-tracker/auth", body, config);
       dispatch({
-        type: LOGIN_SUCCESS,
+        type: authActionTypes.LOGIN_SUCCESS,
         payload: res.data,
       });
       // dispatch(loadUser());
@@ -79,7 +74,7 @@ export const login =
       //   errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
       // }
       dispatch({
-        type: LOGIN_FAIL,
+        type: authActionTypes.LOGIN_FAIL,
       });
     }
   };
@@ -94,16 +89,16 @@ export const loadUser = () => async (dispatch: Dispatch) => {
     console.log(res.data);
     // payload is the user information
     dispatch({
-      type: USER_LOADED,
+      type: authActionTypes.USER_LOADED,
       payload: res.data,
     });
   } catch (err) {
     dispatch({
-      type: AUTH_ERROR,
+      type: authActionTypes.AUTH_ERROR,
     });
   }
 };
 
-export const logout = () => (dispatch: Dispatch) => {
-  dispatch({ type: LOGOUT });
+export const logout = () => (dispatch: Dispatch<LogoutAction>) => {
+  dispatch({ type: authActionTypes.LOGOUT });
 };

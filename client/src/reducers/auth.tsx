@@ -1,12 +1,4 @@
-import {
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  USER_LOADED,
-  AUTH_ERROR,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
-  LOGOUT,
-} from "../actions/types";
+import { authActionTypes } from "../action-types/auth.action-types";
 
 export interface AuthState {
   token: String | null;
@@ -34,48 +26,48 @@ const authReducer = (
 ): AuthState => {
   const { type, payload } = action;
   switch (type) {
-    case REGISTER_SUCCESS:
+    case authActionTypes.REGISTER_SUCCESS:
       localStorage.setItem("token", payload.token);
       return {
         ...state,
         ...payload,
         isAuthenticated: true,
       };
-    case REGISTER_FAIL:
+    case authActionTypes.REGISTER_FAIL:
       localStorage.removeItem("token");
       return {
         ...state,
         token: null,
         isAuthenticated: false,
       };
-    case USER_LOADED:
+    case authActionTypes.USER_LOADED:
       return {
         ...state,
         isAuthenticated: true,
         user: payload, // the output
       };
-    case AUTH_ERROR:
+    case authActionTypes.AUTH_ERROR:
       localStorage.removeItem("token");
       return {
         ...state,
         token: null,
         isAuthenticated: false,
       };
-    case LOGIN_SUCCESS:
+    case authActionTypes.LOGIN_SUCCESS:
       localStorage.setItem("token", payload.token);
       return {
         ...state,
         ...payload,
         isAuthenticated: true,
       };
-    case LOGIN_FAIL:
+    case authActionTypes.LOGIN_FAIL:
       localStorage.removeItem("token");
       return {
         ...state,
         token: null,
         isAuthenticated: false,
       };
-    case LOGOUT:
+    case authActionTypes.LOGOUT:
       localStorage.removeItem("token");
       return {
         ...state,

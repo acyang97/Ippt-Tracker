@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Redirect } from "react-router-dom";
 import { RootState } from "../../reducers/index";
-import { authActionCreators } from "../../actions/index";
+import { authActionCreators } from "../../action-creators/index";
 
 function Copyright() {
   return (

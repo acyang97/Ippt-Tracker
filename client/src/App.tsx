@@ -6,7 +6,8 @@ import Register from "./components/auth/Register";
 import Landing from "./components/layout/Landing";
 import store from "./store";
 import setAuthToken from "./utils/setAuthToken";
-import { loadUser } from "./actions/auth";
+import { loadUser } from "./action-creators/auth";
+import Navbar from "./components/layout/NavBar";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -18,6 +19,7 @@ const App: React.FC = () => {
   }, []);
   return (
     <Provider store={store}>
+      <Navbar />
       <Router>
         <React.Fragment>
           <Route exact path="/landing" component={Landing} />
