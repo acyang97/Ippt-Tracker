@@ -9,6 +9,8 @@ import { bindActionCreators } from "redux";
 import { authActionCreators } from "../../action-creators";
 import React from "react";
 
+const drawerWidth = 240;
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -20,10 +22,15 @@ const useStyles = makeStyles((theme: Theme) =>
     title: {
       flexGrow: 1,
     },
+    appBar: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
+    toolbar: theme.mixins.toolbar,
   })
 );
 
-const NavBar = () => {
+const NavBarVersionTwo = () => {
   const classes = useStyles();
   const { isAuthenticated, isLoading } = useSelector(
     (state: RootState) => state.auth
@@ -38,7 +45,7 @@ const NavBar = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           {/* <LeftDrawer /> */}
           <Typography variant="h6" className={classes.title}>
@@ -59,4 +66,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default NavBarVersionTwo;

@@ -61,7 +61,7 @@ const Login: React.FC = () => {
   };
 
   if (isAuthenticated) {
-    return <Redirect to="/landing" />;
+    return <Redirect to="/home" />;
   }
 
   return (

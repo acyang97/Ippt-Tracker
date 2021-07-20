@@ -3,13 +3,13 @@ import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
-import Landing from "./components/layout/Landing";
 import store from "./store";
 import setAuthToken from "./utils/setAuthToken";
 import { loadUser } from "./action-creators/auth";
 import Navbar from "./components/layout/NavBar";
 import PrivateRoute from "./utils/PrivateRoute";
 import ErrorAlert from "./components/alerts/ErrorAlert";
+import Home from "./components/layout/Home";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -25,7 +25,7 @@ const App: React.FC = () => {
       <Router>
         <React.Fragment>
           <ErrorAlert />
-          <PrivateRoute exact path="/landing" component={Landing} />
+          <PrivateRoute exact path="/home" component={Home} />
           <Switch>
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
