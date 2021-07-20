@@ -10,7 +10,9 @@ import {
   RegisterFailAction,
   RegisterSucessAction,
 } from "../actions/auth.actions";
+import { ErrorAlert } from "../interfaces/Alert.interface";
 import setAuthToken from "../utils/setAuthToken";
+import { setAlert } from "./alert";
 
 // REGISTER USER
 export const register =
@@ -43,10 +45,12 @@ export const register =
       dispatch(loadUser() as any);
     } catch (err) {
       console.log(err.message);
-      //   const errors = err.response.data.errors;
-      //   if (errors) {
-      //     errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
-      //   }
+      const errors = err.response.data.errors;
+      if (errors) {
+        errors.forEach((error: ErrorAlert) =>
+          dispatch(setAlert(error.message) as any)
+        );
+      }
       dispatch({
         type: authActionTypes.REGISTER_FAIL,
       });
@@ -73,11 +77,13 @@ export const login =
       });
       dispatch(loadUser() as any);
     } catch (err) {
-      console.log(err.message);
-      // const errors = err.response.data.errors;
-      // if (errors) {
-      //   errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
-      // }
+      const errors = err.response.data.errors;
+      console.log("errors", errors);
+      if (errors) {
+        errors.forEach((error: ErrorAlert) =>
+          dispatch(setAlert(error.message) as any)
+        );
+      }
       dispatch({
         type: authActionTypes.LOGIN_FAIL,
       });

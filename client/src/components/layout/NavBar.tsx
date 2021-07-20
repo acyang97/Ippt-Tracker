@@ -51,7 +51,7 @@ const NavBar = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            News
+            IPPT Tracker - Road to Gold
           </Typography>
           {!isLoading && (
             <React.Fragment>
