@@ -1,7 +1,7 @@
 export interface AuthError {
   errors: [
     {
-      msg: string;
+      message: string;
     }
   ];
 }
