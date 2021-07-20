@@ -3,23 +3,23 @@ import { LoginUserDto } from "../dto/user.dto";
 import { validateAndConvert } from "../middleware/validateAndConvert";
 import { loginUser } from "../services/auth.service";
 import { auth } from "../middleware/auth";
-import User from "../models/User.schema";
-import { UserModel } from "../interfaces/user.interface";
+import UserModel from "../models/User.schema";
+import { UserDoc } from "../interfaces/user.interface";
 import { AuthError } from "../interfaces/erros.interface";
 
 const router = express.Router();
 
 interface UserAuthRequest extends Request {
-  user: UserModel;
+  user: UserDoc;
 }
 // @route  GET ippt-tracker/auth;
 // @desc   TEST route
-// @access public
+// @access private
 // put middle ware as second argument
 router.get("/", auth, async (req: UserAuthRequest, res: Response) => {
   try {
     // protected route
-    const user = await User.findById(req.user.id).select("-password");
+    const user = await UserModel.findById(req.user.id).select("-password");
     res.json(user);
   } catch (err) {
     console.error(err.message);

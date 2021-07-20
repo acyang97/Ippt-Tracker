@@ -5,3 +5,11 @@ export interface AuthError {
     }
   ];
 }
+
+export interface GeneralError {
+  errors: GeneralSingleError[];
+}
+
+export interface GeneralSingleError {
+  message: string;
+}

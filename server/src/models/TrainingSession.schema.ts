@@ -1,6 +1,11 @@
 import { Schema, model } from "mongoose";
+import { TrainingSession } from "../interfaces/trainingSession.interface";
 
-const trainingSession = new Schema({
+const trainingSession = new Schema<TrainingSession>({
+  userId: {
+    type: String,
+    required: true,
+  },
   date: {
     type: Date,
     required: true,
@@ -17,7 +22,7 @@ const trainingSession = new Schema({
   // should calculate the seconds. Idea will be that in frontend, user types in the minutes
   // then we conver it to seconds for easier calculations
   // Might have a better solution but think about it later
-  "2.4km": {
+  run: {
     type: Number,
     required: true,
   },
@@ -48,6 +53,7 @@ const trainingSession = new Schema({
   ],
 });
 
-const TrainingSession = model("TrainingSession", trainingSession);
-
-export default TrainingSession;
+export const TrainingSessionModel = model<TrainingSession>(
+  "TrainingSession",
+  trainingSession
+);

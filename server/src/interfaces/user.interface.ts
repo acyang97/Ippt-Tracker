@@ -1,10 +1,8 @@
 import { Document } from "mongoose";
 
-export interface User {
+export interface UserDoc extends Document {
   name: String;
   email: String;
   password: String;
   age: Number;
 }
-
-export type UserModel = User & Document;

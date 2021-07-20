@@ -17,6 +17,7 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
 
 app.use("/ippt-tracker/users", userRoutes);
 app.use("/ippt-tracker/auth", authRoutes);
+app.use("/ippt-tracker/training-session", authRoutes);
 
 const PORT = process.env.PORT || 5000;
 

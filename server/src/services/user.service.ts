@@ -1,5 +1,5 @@
 import { Response } from "express";
-import User from "../models/User.schema";
+import UserModel from "../models/User.schema";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import config from "config";
@@ -13,7 +13,7 @@ export const createUser = async (
   res: Response
 ) => {
   try {
-    let user = await User.findOne({ email });
+    let user = await UserModel.findOne({ email });
     if (user) {
       return res
         .status(400)
@@ -26,7 +26,7 @@ export const createUser = async (
         ],
       });
     }
-    user = new User({ name, email, age, password });
+    user = new UserModel({ name, email, age, password });
 
     // encrypt the password
     const salt = await bcrypt.genSalt(10);

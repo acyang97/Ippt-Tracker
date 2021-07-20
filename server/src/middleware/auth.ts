@@ -1,11 +1,11 @@
 import { Response, Request, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import config from "config";
-import { UserModel } from "../interfaces/user.interface";
+import { UserDoc } from "../interfaces/user.interface";
 import { AuthError } from "../interfaces/erros.interface";
 
 const auth = (
-  req: Request & { user: UserModel },
+  req: Request & { user: UserDoc },
   res: Response,
   next: NextFunction
 ): Response<AuthError> | void => {

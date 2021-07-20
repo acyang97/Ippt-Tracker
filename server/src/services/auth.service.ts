@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import User from "../models/User.schema";
+import UserModel from "../models/User.schema";
 import jwt from "jsonwebtoken";
 import config from "config";
 import bcrypt from "bcryptjs";
-import { UserModel } from "../interfaces/user.interface";
+import { UserDoc } from "../interfaces/user.interface";
 import { AuthError } from "../interfaces/erros.interface";
 
 // TODO: figure out how to make the return type
@@ -14,7 +14,7 @@ export const loginUser = async (
   const { email, password } = req.body;
   try {
     // If user exists, send error
-    let user: UserModel = await User.findOne({ email });
+    let user: UserDoc = await UserModel.findOne({ email });
     if (!user) {
       return res
         .status(400)
