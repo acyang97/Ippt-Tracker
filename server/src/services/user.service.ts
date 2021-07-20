@@ -15,11 +15,15 @@ export const createUser = async (
   try {
     let user = await User.findOne({ email });
     if (user) {
-      return res.status(400).json({ errors: [{ msg: "User already exists" }] });
+      return res
+        .status(400)
+        .json({ errors: [{ message: "User already exists" }] });
     }
     if (password !== confirmPassword) {
       return res.status(400).json({
-        errors: [{ msg: "Please make sure that the passwords are the same" }],
+        errors: [
+          { message: "Please make sure that the passwords are the same" },
+        ],
       });
     }
     user = new User({ name, email, age, password });

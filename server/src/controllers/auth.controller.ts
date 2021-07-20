@@ -39,6 +39,7 @@ router.post(
     const { body } = req;
     const { error } = await validateAndConvert(LoginUserDto, body);
     if (error) {
+      console.log(error);
       return res.status(400).send(error);
     }
     await loginUser(req, res);
