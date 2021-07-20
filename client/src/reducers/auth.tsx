@@ -1,18 +1,5 @@
 import { authActionTypes } from "../action-types/auth.action-types";
-
-export interface AuthState {
-  token: String | null;
-  isAuthenticated: boolean | null;
-  isLoading: boolean;
-  user: IUser | null;
-}
-
-export interface IUser {
-  name: String;
-  email: String;
-  password: String;
-  age: Number;
-}
+import { AuthState } from "../interfaces/Auth.interface";
 
 const initialState: AuthState = {
   token: localStorage.getItem("token"),
