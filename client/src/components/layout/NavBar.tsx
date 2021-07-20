@@ -40,7 +40,6 @@ const NavBar = () => {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          {/* <LeftDrawer /> */}
           <Typography variant="h6" className={classes.title}>
             IPPT Tracker - Road to Gold
           </Typography>

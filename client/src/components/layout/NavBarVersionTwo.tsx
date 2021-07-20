@@ -47,7 +47,6 @@ const NavBarVersionTwo = () => {
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          {/* <LeftDrawer /> */}
           <Typography variant="h6" className={classes.title}>
             IPPT Tracker - Road to Gold
           </Typography>

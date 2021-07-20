@@ -2,7 +2,7 @@ import express, { Application, NextFunction, Request, Response } from "express";
 import { connectDB } from "../config/db";
 import userRoutes from "./controllers/user.controller";
 import authRoutes from "./controllers/auth.controller";
-
+import trainingSessionRoutes from "./controllers/trainingSession.controller";
 // import connect to db
 
 const app: Application = express();
@@ -17,7 +17,7 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
 
 app.use("/ippt-tracker/users", userRoutes);
 app.use("/ippt-tracker/auth", authRoutes);
-app.use("/ippt-tracker/training-session", authRoutes);
+app.use("/ippt-tracker/training-session", trainingSessionRoutes);
 
 const PORT = process.env.PORT || 5000;
 

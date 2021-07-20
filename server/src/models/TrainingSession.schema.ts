@@ -26,6 +26,9 @@ const trainingSession = new Schema<TrainingSession>({
     type: Number,
     required: true,
   },
+  points: {
+    type: Number,
+  },
   // should track who likes this post too
   likes: [
     {

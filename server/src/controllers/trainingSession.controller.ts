@@ -1,13 +1,13 @@
 import express, { Request, Response } from "express";
 import { TrainingSessionModel } from "../models/TrainingSession.schema";
 import { auth } from "../middleware/auth";
-import UserModel from "../models/User.schema";
 import { UserDoc } from "../interfaces/user.interface";
 import { TrainingSession } from "../interfaces/trainingSession.interface";
 import { validateAndConvert } from "../middleware/validateAndConvert";
 import { CreateTrainingSessionDto } from "../dto/trainingSession.dto";
 import { GeneralError } from "../interfaces/erros.interface";
 import { converDtoErrorToGeneralError } from "../utils/convertDtoErrorToGeneralError";
+import { calculatePoints } from "../utils/calculateIpptPoints";
 const router = express.Router();
 
 // @route  GET ippt-tracker/training-session;
@@ -64,11 +64,14 @@ router.post("/create", auth, async (req: UserRequest, res: Response) => {
     }
     // perform logic to create the training session
     const { pushUps, sitUps, run } = body;
+    // calculate points
+    const points = await calculatePoints(pushUps, sitUps, run, req.user.age);
     const newTrainingSession = new TrainingSessionModel({
       userId: req.user.id,
       pushUps,
       sitUps,
       run,
+      points,
       likes: [],
       comments: [],
     });
@@ -80,3 +83,5 @@ router.post("/create", auth, async (req: UserRequest, res: Response) => {
     res.status(500).send("server error");
   }
 });
+
+export default router;

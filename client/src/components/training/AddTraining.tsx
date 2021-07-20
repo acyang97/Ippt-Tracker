@@ -4,9 +4,12 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import NavBarVersionTwo from "../layout/NavBarVersionTwo";
 import SideDrawer from "../layout/SideDrawer";
-import { Button, Grid, TextField } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import TimeField from "react-simple-timefield";
 import { useState } from "react";
+import { bindActionCreators } from "redux";
+import { trainingSessionActionCreators } from "../../action-creators";
+import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,8 +36,19 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const AddTraining = () => {
   const classes = useStyles();
-
+  const dispatch = useDispatch();
+  const { createTraining } = bindActionCreators(
+    trainingSessionActionCreators,
+    dispatch
+  );
   const [runTiming, setRunTiming] = useState("12:30");
+  const [pushUps, setPushUps] = useState(0);
+  const [sitUps, setSitUps] = useState(0);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    createTraining(pushUps, sitUps, runTiming);
+  };
 
   return (
     <div className={classes.root}>
@@ -44,17 +58,19 @@ const AddTraining = () => {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Typography paragraph>Add your IPPT Training results</Typography>
-        <form onSubmit={(e) => console.log("a")}>
+        <form onSubmit={(e) => onSubmit(e)}>
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
+            type="number"
             id="pushUps"
             label="Push Ups"
             name="pushUps"
+            value={pushUps}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              console.log("a")
+              setPushUps(Number(e.target.value))
             }
           />
           <TextField
@@ -62,11 +78,13 @@ const AddTraining = () => {
             margin="normal"
             required
             fullWidth
+            type="number"
             name="sitUps"
             label="Sit Ups"
             id="sitUps"
+            value={sitUps}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              console.log("a")
+              setSitUps(Number(e.target.value))
             }
           />
           <TimeField
