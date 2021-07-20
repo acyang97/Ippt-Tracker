@@ -21,6 +21,31 @@ const trainingSession = new Schema({
     type: Number,
     required: true,
   },
+  // should track who likes this post too
+  likes: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    },
+  ],
+  comments: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "users",
+      },
+      description: {
+        type: String,
+        required: true,
+      },
+      date: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  ],
 });
 
 const TrainingSession = model("TrainingSession", trainingSession);
