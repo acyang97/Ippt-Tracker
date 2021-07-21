@@ -51,7 +51,10 @@ export const createTraining =
         body,
         config
       );
-
+      dispatch({
+        type: TrainingSessionActionTypes.CREATE_TRAINING_SUCCESS,
+        payload: res.data,
+      });
       dispatch(setAlert("Success", "success") as any);
     } catch (err) {
       const errors = err.response.data.errors;

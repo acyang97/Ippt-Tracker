@@ -12,7 +12,7 @@ export interface InitLoadTrainingsFailAction {
 
 export interface CreateTrainingAction {
   type: TrainingSessionActionTypes.CREATE_TRAINING;
-  payload: AnalyserNode; //TODO: add the specific type later
+  payload: IHydratedTrainingSession; //TODO: add the specific type later
 }
 
 export interface CreateTrainingSuccessAction {

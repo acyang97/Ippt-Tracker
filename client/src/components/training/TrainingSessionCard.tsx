@@ -14,6 +14,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import { isNil } from "lodash";
 import { IHydratedTrainingSession } from "../../interfaces/TrainingSession.interface";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -79,7 +80,8 @@ const TrainingSessionCard = (props: {
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
-            {name[0].toUpperCase()}
+            {/* TODO, find out why it might be undefined */}
+            {!isNil(name) && name[0].toUpperCase()}
           </Avatar>
         }
         action={

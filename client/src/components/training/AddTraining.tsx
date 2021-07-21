@@ -11,6 +11,7 @@ import { bindActionCreators } from "redux";
 import { trainingSessionActionCreators } from "../../action-creators";
 import { useDispatch } from "react-redux";
 import AlertComponent from "../alerts/AlertComponent";
+import { setAlert } from "../../action-creators/alert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,6 +49,12 @@ const AddTraining = () => {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (pushUps < 0 || sitUps < 0) {
+      dispatch(
+        setAlert("Push-Ups and Sit-Ups have to be positive", "error") as any
+      );
+      return;
+    }
     createTraining(pushUps, sitUps, runTiming);
   };
 
