@@ -1,7 +1,7 @@
 import { IUser } from "./User.interface";
 
 export interface AuthState {
-  token: String | null;
+  token: string | null;
   isAuthenticated: boolean | null;
   isLoading: boolean;
   user: IUser | null;

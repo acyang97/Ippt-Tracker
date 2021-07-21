@@ -8,7 +8,8 @@ export interface ITrainingSession {
   sitUps: number;
   run: number;
   date: Date;
-  userId: IUser;
+  user: IUser;
+  userId: string;
   points: number;
 }
 

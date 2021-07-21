@@ -2,12 +2,17 @@ import express, { Request, Response } from "express";
 import { TrainingSessionModel } from "../models/TrainingSession.schema";
 import { auth } from "../middleware/auth";
 import { UserDoc } from "../interfaces/user.interface";
-import { TrainingSession } from "../interfaces/trainingSession.interface";
+import {
+  HydratedTrainingSession,
+  TrainingSession,
+} from "../interfaces/trainingSession.interface";
 import { validateAndConvert } from "../middleware/validateAndConvert";
 import { CreateTrainingSessionDto } from "../dto/trainingSession.dto";
 import { GeneralError } from "../interfaces/erros.interface";
 import { converDtoErrorToGeneralError } from "../utils/convertDtoErrorToGeneralError";
 import { calculatePoints } from "../utils/calculateIpptPoints";
+import { getAllTrainingSessions } from "../services/trainingSession.service";
+
 const router = express.Router();
 
 // @route  GET ippt-tracker/training-session;
@@ -16,10 +21,9 @@ const router = express.Router();
 router.get("/", auth, async (req: Request, res: Response) => {
   try {
     // in future, wiil need to filter such taht only friends can see this
-    const trainingSessions = await TrainingSessionModel.find().sort({
-      date: -1,
-    });
-    res.json(trainingSessions);
+    const trainingSessionsAndUserInfo: HydratedTrainingSession[] =
+      await getAllTrainingSessions();
+    return res.json(trainingSessionsAndUserInfo);
   } catch (err) {
     console.error(err.message);
     res.status(500).send({ errors: [{ message: "Server error" }] });

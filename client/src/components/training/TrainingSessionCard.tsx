@@ -57,9 +57,7 @@ const TrainingSessionCard = (props: { trainingSession: ITrainingSession }) => {
     <Card className={classes.root}>
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            R
-          </Avatar>
+          <Avatar aria-label="recipe" className={classes.avatar}></Avatar>
         }
         action={
           <IconButton aria-label="settings">

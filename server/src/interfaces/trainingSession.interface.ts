@@ -1,13 +1,19 @@
-import { Document } from "mongoose";
-import { UserDoc } from "./user.interface";
+import { Document, Types } from "mongoose";
+import { User } from "./user.interface";
 
-export interface TrainingSession extends Document {
-  userId: String;
+export interface TrainingSession {
+  userId: string;
   date: Date;
-  pushUps: Number;
-  sitUps: Number;
-  run: Number;
-  points: Number;
-  likes: UserDoc[]; // for each one, we initalizew it as an empty array first
-  comments: UserDoc[];
+  pushUps: number;
+  sitUps: number;
+  run: number;
+  points: number;
+  likes: User[]; // for each one, we initalizew it as an empty array first
+  comments: User[];
 }
+
+export interface TrainingSessionDoc extends Document, TrainingSession {
+  _id: Types.ObjectId;
+}
+
+export type HydratedTrainingSession = TrainingSession & User;

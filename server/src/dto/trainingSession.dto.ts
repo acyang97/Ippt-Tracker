@@ -1,12 +1,4 @@
-import {
-  IsDefined,
-  IsEmail,
-  IsInt,
-  IsNotEmpty,
-  IsPositive,
-  IsString,
-  MinLength,
-} from "class-validator";
+import { IsDefined, IsInt, IsNotEmpty, IsPositive } from "class-validator";
 
 export class CreateTrainingSessionDto {
   @IsInt()

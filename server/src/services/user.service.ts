@@ -3,13 +3,14 @@ import UserModel from "../models/User.schema";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import config from "config";
+import { User } from "../interfaces/user.interface";
 
 export const createUser = async (
-  name: String,
-  email: String,
-  password: String,
-  confirmPassword: String,
-  age: Number,
+  name: string,
+  email: string,
+  password: string,
+  confirmPassword: string,
+  age: number,
   res: Response
 ) => {
   try {
@@ -53,4 +54,8 @@ export const createUser = async (
     console.error(err.message);
     res.status(500).send("Server error");
   }
+};
+
+export const findUserById = (userId: string): Promise<User> => {
+  return UserModel.findById(userId).lean().exec();
 };
