@@ -6,6 +6,7 @@ import { findUserById } from "./user.service";
 export const getAllTrainingSessions = async (): Promise<
   HydratedTrainingSession[]
 > => {
+  // in future, wiil need to filter such taht only friends can see this
   const trainingSessions = await TrainingSessionModel.find()
     .sort({
       date: -1,
