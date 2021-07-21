@@ -1,5 +1,5 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import Alert from "@material-ui/lab/Alert";
+import Alert, { Color } from "@material-ui/lab/Alert";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import { ErrorAlert as ErrorAlertInterface } from "../../interfaces/Alert.interface";
@@ -17,21 +17,27 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 // I want this to access the alert state
-const ErrorAlert = () => {
+const AlertComponent = () => {
   const classes = useStyles();
   const alerts: ErrorAlertInterface[] = useSelector(
     (state: RootState) => state.alert
   ); // the alerts
 
+  const convertToColor = (messageType: string): Color => {
+    return messageType as Color;
+  };
+
   return (
     <React.Fragment>
       {alerts.map((alert) => (
         <div className={classes.root} key={alert.id}>
-          <Alert severity="error">{alert.message}</Alert>
+          <Alert severity={convertToColor(alert.messageType)}>
+            {alert.message}
+          </Alert>
         </div>
       ))}
     </React.Fragment>
   );
 };
 
-export default ErrorAlert;
+export default AlertComponent;

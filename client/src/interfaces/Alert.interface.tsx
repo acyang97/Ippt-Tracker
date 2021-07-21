@@ -1,5 +1,6 @@
 export interface Alert {
   message: string;
+  messageType: string;
   id?: string;
 }
 

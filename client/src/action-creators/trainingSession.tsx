@@ -23,7 +23,7 @@ export const initLoadTrainingSession =
       const errors = err.response.data.errors;
       if (errors) {
         errors.forEach((error: ErrorAlert) =>
-          dispatch(setAlert(error.message) as any)
+          dispatch(setAlert(error.message, "error") as any)
         );
       }
     }
@@ -51,11 +51,13 @@ export const createTraining =
         body,
         config
       );
+
+      dispatch(setAlert("Success", "success") as any);
     } catch (err) {
       const errors = err.response.data.errors;
       if (errors) {
         errors.forEach((error: ErrorAlert) =>
-          dispatch(setAlert(error.message) as any)
+          dispatch(setAlert(error.message, "error") as any)
         );
       }
       // dispatch({

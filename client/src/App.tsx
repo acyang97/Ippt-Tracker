@@ -7,7 +7,6 @@ import store from "./store";
 import setAuthToken from "./utils/setAuthToken";
 import { loadUser } from "./action-creators/auth";
 import PrivateRoute from "./utils/PrivateRoute";
-import ErrorAlert from "./components/alerts/ErrorAlert";
 import Home from "./components/layout/Home";
 import AddTraining from "./components/training/AddTraining";
 
@@ -23,7 +22,6 @@ const App: React.FC = () => {
     <Provider store={store}>
       <Router>
         <React.Fragment>
-          <ErrorAlert />
           <PrivateRoute exact path="/home" component={Home} />
           <PrivateRoute exact path="/add-training" component={AddTraining} />
           <Switch>

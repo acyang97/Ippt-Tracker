@@ -10,6 +10,7 @@ import { useState } from "react";
 import { bindActionCreators } from "redux";
 import { trainingSessionActionCreators } from "../../action-creators";
 import { useDispatch } from "react-redux";
+import AlertComponent from "../alerts/AlertComponent";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -57,6 +58,7 @@ const AddTraining = () => {
       <SideDrawer />
       <main className={classes.content}>
         <div className={classes.toolbar} />
+        <AlertComponent />
         <Typography paragraph>Add your IPPT Training results</Typography>
         <form onSubmit={(e) => onSubmit(e)}>
           <TextField

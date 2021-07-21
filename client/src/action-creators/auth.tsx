@@ -49,7 +49,7 @@ export const register =
       const errors = err.response.data.errors;
       if (errors) {
         errors.forEach((error: ErrorAlert) =>
-          dispatch(setAlert(error.message) as any)
+          dispatch(setAlert(error.message, "error") as any)
         );
       }
       dispatch({
@@ -77,12 +77,13 @@ export const login =
         payload: res.data,
       });
       dispatch(loadUser() as any);
+      dispatch(setAlert("Success", "success") as any);
     } catch (err) {
       const errors = err.response.data.errors;
       console.log("errors", errors);
       if (errors) {
         errors.forEach((error: ErrorAlert) =>
-          dispatch(setAlert(error.message) as any)
+          dispatch(setAlert(error.message, "error") as any)
         );
       }
       dispatch({
