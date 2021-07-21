@@ -14,7 +14,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { ITrainingSession } from "../../interfaces/TrainingSession.interface";
+import { IHydratedTrainingSession } from "../../interfaces/TrainingSession.interface";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,7 +42,9 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const TrainingSessionCard = (props: { trainingSession: ITrainingSession }) => {
+const TrainingSessionCard = (props: {
+  hydratedTrainingSession: IHydratedTrainingSession;
+}) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -50,33 +52,60 @@ const TrainingSessionCard = (props: { trainingSession: ITrainingSession }) => {
     setExpanded(!expanded);
   };
 
-  const { comments, likes, pushUps, sitUps, run, date, userId, points } =
-    props.trainingSession;
+  const {
+    comments,
+    likes,
+    pushUps,
+    sitUps,
+    run,
+    date,
+    name,
+    // userId,
+    ipptPoints,
+  } = props.hydratedTrainingSession;
+
+  const formatDate = (d: Date) => {
+    return new Date(d).toDateString() + " " + new Date(d).toLocaleTimeString();
+  };
+
+  const formatIpptRunTiming = (runTime: number): string => {
+    const minutes = Math.floor(runTime / 60);
+    var seconds = runTime - minutes * 60;
+    return `${minutes}:${seconds}`;
+  };
 
   return (
     <Card className={classes.root}>
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}></Avatar>
+          <Avatar aria-label="recipe" className={classes.avatar}>
+            {name[0].toUpperCase()}
+          </Avatar>
         }
         action={
           <IconButton aria-label="settings">
             <MoreVertIcon />
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
+        title={`${name}'s IPPT Training`}
+        subheader={formatDate(date)}
       />
-      {/* <CardMedia
-        className={classes.media}
-        image="/static/images/cards/paella.jpg"
-        title="Paella dish"
-      /> */}
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
+          Total Points: {ipptPoints?.totalPoints}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="p">
+          Result: {ipptPoints?.result}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="p">
+          Sit-Ups: Reps - {sitUps}, Points - {ipptPoints?.sitUpsPoints}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="p">
+          Push-Ups: Reps - {pushUps}, Points - {ipptPoints?.pushUpsPoints}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="p">
+          2.4 Km: Run Timing - {formatIpptRunTiming(run)}, Points -{" "}
+          {ipptPoints?.runPoints}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>

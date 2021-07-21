@@ -1,8 +1,9 @@
 import { TrainingSessionActionTypes } from "../action-types/trainingSession.action-types";
+import { IHydratedTrainingSession } from "../interfaces/TrainingSession.interface";
 
 export interface InitLoadTrainingsSuccessAction {
   type: TrainingSessionActionTypes.INIT_LOAD_TRAININGS_SUCCESS;
-  payload: any; //TODO: add the specific type later
+  payload: IHydratedTrainingSession[];
 }
 
 export interface InitLoadTrainingsFailAction {
@@ -11,6 +12,7 @@ export interface InitLoadTrainingsFailAction {
 
 export interface CreateTrainingAction {
   type: TrainingSessionActionTypes.CREATE_TRAINING;
+  payload: AnalyserNode; //TODO: add the specific type later
 }
 
 export interface CreateTrainingSuccessAction {

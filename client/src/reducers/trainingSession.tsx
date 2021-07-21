@@ -1,8 +1,8 @@
 import { TrainingSessionActionTypes } from "../action-types/trainingSession.action-types";
-import { ITrainingSession } from "../interfaces/TrainingSession.interface";
+import { IHydratedTrainingSession } from "../interfaces/TrainingSession.interface";
 
 export interface TrainingSessionsState {
-  trainingSessions: ITrainingSession[];
+  trainingSessions: IHydratedTrainingSession[];
 }
 
 // I want this to contain the list of errors
@@ -20,6 +20,12 @@ function TrainingSessionReducer(
       return {
         ...state,
         trainingSessions: payload,
+      };
+    case TrainingSessionActionTypes.CREATE_TRAINING_SUCCESS:
+      const { trainingSessions } = state;
+      const updatedTrainingSessions = [...trainingSessions, payload];
+      return {
+        trainingSessions: updatedTrainingSessions,
       };
     default:
       return state;

@@ -4,6 +4,7 @@ import { auth } from "../middleware/auth";
 import { UserDoc } from "../interfaces/user.interface";
 import {
   HydratedTrainingSession,
+  IpptPoints,
   TrainingSession,
 } from "../interfaces/trainingSession.interface";
 import { validateAndConvert } from "../middleware/validateAndConvert";
@@ -25,6 +26,7 @@ router.get("/", auth, async (req: Request, res: Response) => {
       await getAllTrainingSessions();
     return res.json(trainingSessionsAndUserInfo);
   } catch (err) {
+    console.log(err);
     console.error(err.message);
     res.status(500).send({ errors: [{ message: "Server error" }] });
   }
@@ -69,18 +71,24 @@ router.post("/create", auth, async (req: UserRequest, res: Response) => {
     // perform logic to create the training session
     const { pushUps, sitUps, run } = body;
     // calculate points
-    const points = await calculatePoints(pushUps, sitUps, run, req.user.age);
+    const ipptPoints: IpptPoints = await calculatePoints(
+      pushUps,
+      sitUps,
+      run,
+      req.user.age
+    );
     const newTrainingSession = new TrainingSessionModel({
       userId: req.user.id,
       pushUps,
       sitUps,
       run,
-      points,
+      ipptPoints,
       likes: [],
       comments: [],
     });
 
     const trainingSession: TrainingSession = await newTrainingSession.save();
+    console.log("trainingSession", trainingSession);
     res.json(trainingSession);
   } catch (err) {
     console.error(err.message);

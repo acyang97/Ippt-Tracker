@@ -10,7 +10,29 @@ export interface ITrainingSession {
   date: Date;
   user: IUser;
   userId: string;
-  points: number;
+  ipptPoints: IpptPoints;
+}
+
+export interface IHydratedTrainingSession extends ITrainingSession {
+  name: string;
+  email: string;
+  age: number;
+}
+
+export interface IpptPoints {
+  sitUpsPoints: number;
+  pushUpsPoints: number;
+  runPoints: number;
+  totalPoints: number;
+  result: IpptResult;
+}
+
+export enum IpptResult {
+  GOLD = "Gold",
+  SILVER = "Silver",
+  PASS = "Pass",
+  PASS_NSMEN = "Pass*",
+  FAIL = "Fail",
 }
 
 export interface TrainingSessionComment {

@@ -87,7 +87,7 @@ const Home = () => {
         </Typography>
         {trainingSessions.map((session) => (
           <div className={classes.cardPadding} key={session._id}>
-            <TrainingSessionCard trainingSession={session} />
+            <TrainingSessionCard hydratedTrainingSession={session} />
           </div>
         ))}
       </main>

@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
-const spinner = require("../assets/spinner.gif");
-
+import spinner from "../assets/spinner.gif";
 const Spinner = () => (
   <Fragment>
     <img

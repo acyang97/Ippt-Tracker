@@ -26,8 +26,22 @@ const trainingSession = new Schema<TrainingSession>({
     type: Number,
     required: true,
   },
-  points: {
-    type: Number,
+  ipptPoints: {
+    sitUpsPoints: {
+      type: Number,
+    },
+    pushUpsPoints: {
+      type: Number,
+    },
+    runPoints: {
+      type: Number,
+    },
+    totalPoints: {
+      type: Number,
+    },
+    result: {
+      type: String,
+    },
   },
   // should track who likes this post too
   likes: [
