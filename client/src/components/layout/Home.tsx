@@ -3,6 +3,13 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import NavBarVersionTwo from "./NavBarVersionTwo";
 import SideDrawer from "./SideDrawer";
+import TrainingSessionCard from "../training/TrainingSessionCard";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../reducers";
+import { bindActionCreators } from "redux";
+import { trainingSessionActionCreators } from "../../action-creators";
+import { useEffect } from "react";
+import { TrainingSessionsState } from "../../reducers/trainingSession";
 
 const drawerWidth = 240;
 
@@ -29,11 +36,32 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.background.default,
       padding: theme.spacing(3),
     },
+    feed: {
+      padding: theme.spacing(3),
+    },
+    cardPadding: {
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
+    },
   })
 );
 
 const Home = () => {
   const classes = useStyles();
+  const state: TrainingSessionsState = useSelector(
+    (state: RootState) => state.trainingSession
+  );
+  const { trainingSessions } = state;
+  const dispatch = useDispatch();
+  const { initLoadTrainingSession } = bindActionCreators(
+    trainingSessionActionCreators,
+    dispatch
+  );
+
+  // TODO: change the logic on when this should reload again
+  useEffect(() => {
+    initLoadTrainingSession();
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -57,6 +85,11 @@ const Home = () => {
           lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
           faucibus et molestie ac.
         </Typography>
+        {trainingSessions.map((session) => (
+          <div className={classes.cardPadding} key={session._id}>
+            <TrainingSessionCard trainingSession={session} />
+          </div>
+        ))}
       </main>
     </div>
   );

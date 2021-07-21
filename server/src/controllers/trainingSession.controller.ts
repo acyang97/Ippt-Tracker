@@ -22,7 +22,7 @@ router.get("/", auth, async (req: Request, res: Response) => {
     res.json(trainingSessions);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("server error");
+    res.status(500).send({ errors: [{ message: "Server error" }] });
   }
 });
 
@@ -48,7 +48,7 @@ router.get(
       res.json(trainingSessions);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("server error");
+      res.status(500).send({ errors: [{ message: "Server error" }] });
     }
   }
 );
@@ -80,7 +80,7 @@ router.post("/create", auth, async (req: UserRequest, res: Response) => {
     res.json(trainingSession);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("server error");
+    res.status(500).send({ errors: [{ message: "Server error" }] });
   }
 });
 

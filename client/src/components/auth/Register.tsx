@@ -14,7 +14,6 @@ import { bindActionCreators } from "redux";
 import { Redirect } from "react-router-dom";
 import { RootState } from "../../reducers/index";
 import { authActionCreators } from "../../action-creators/index";
-import NavBar from "../layout/NavBar";
 
 function Copyright() {
   return (
@@ -85,7 +84,6 @@ const Register = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <NavBar />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />

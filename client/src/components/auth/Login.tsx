@@ -17,7 +17,6 @@ import { RootState } from "../../reducers";
 import { bindActionCreators } from "redux";
 import { authActionCreators } from "../../action-creators";
 import { Redirect } from "react-router-dom";
-import NavBar from "../layout/NavBar";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -67,7 +66,6 @@ const Login: React.FC = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <NavBar />
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>

@@ -1,12 +1,33 @@
 import axios from "axios";
 import { Dispatch } from "redux";
+import { TrainingSessionActionTypes } from "../action-types/trainingSession.action-types";
 import { ErrorAlert } from "../interfaces/Alert.interface";
 import { convertTimeInStringToSecond } from "../utils/convertTimeInStringToSeconds";
 import { setAlert } from "./alert";
 
-// REGISTER USER
-// the only reason for dispatching is that
-// I need to add it to the list of trainings
+export const initLoadTrainingSession = () => async (dispatch: Dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  try {
+    const res = await axios.get("/ippt-tracker/training-session", config);
+    console.log("res.data", res.data);
+    dispatch({
+      type: TrainingSessionActionTypes.INIT_LOAD_TRAININGS_SUCCESS,
+      payload: res.data,
+    });
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach((error: ErrorAlert) =>
+        dispatch(setAlert(error.message) as any)
+      );
+    }
+  }
+};
+
 export const createTraining =
   (pushUps: Number, sitUps: Number, run: string) =>
   async (dispatch: Dispatch) => {
@@ -17,7 +38,6 @@ export const createTraining =
     };
     // do something to conver the run time in stirng to seconds before sending to the backend
     const runInSeconds = convertTimeInStringToSecond(run);
-    console.log(runInSeconds);
     const body = {
       pushUps,
       sitUps,
