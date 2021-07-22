@@ -19,6 +19,22 @@ const userSchema = new Schema<UserDoc>({
     type: Number,
     required: true,
   },
+  following: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    },
+  ],
+  followers: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    },
+  ],
 });
 
 const UserModel = model<UserDoc>("User", userSchema);

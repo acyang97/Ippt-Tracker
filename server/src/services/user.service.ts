@@ -27,7 +27,9 @@ export const createUser = async (
         ],
       });
     }
-    user = new UserModel({ name, email, age, password });
+    const followers: User[] = [];
+    const following: User[] = [];
+    user = new UserModel({ name, email, age, password, followers, following });
 
     // encrypt the password
     const salt = await bcrypt.genSalt(10);
@@ -71,4 +73,53 @@ export const findUsers = (userId: string): Promise<User[]> => {
 };
 
 // Need to update the schema to do this thing
-export const followUser = (ownUserId: string, userToFollowUserId: string) => {};
+export const followUser = async (
+  ownUserId: string,
+  userIdOfUserToFollow: string,
+  res: Response
+) => {
+  const userToFollow = await findUserById(userIdOfUserToFollow);
+  const ownUser = await findUserById(ownUserId);
+  const listOfFollowers: User[] = userToFollow.followers;
+  if (listOfFollowers.find((user) => user.email === ownUser.email)) {
+    return res
+      .status(400)
+      .send({ errors: [{ message: `Already followed ${userToFollow.name}` }] });
+  }
+  if (ownUser.following.find((user) => user.email === userToFollow.email)) {
+    return res
+      .status(400)
+      .send({ errors: [{ message: `Already followed ${userToFollow.name}` }] });
+  }
+
+  let newFollowingForOwnUser = ownUser.following;
+  newFollowingForOwnUser.push(userToFollow);
+
+  const updatedOwnUser: User = await UserModel.findOneAndUpdate(
+    { _id: ownUserId },
+    {
+      $set: {
+        following: newFollowingForOwnUser,
+      },
+    },
+    { new: true }
+  );
+
+  let newFollowersForOtherUser = userToFollow.followers;
+  newFollowersForOtherUser.push(ownUser);
+
+  const updatedUserToFollow = await UserModel.findOneAndUpdate(
+    { _id: userIdOfUserToFollow },
+    {
+      $set: {
+        followers: newFollowersForOtherUser,
+      },
+    },
+    { new: true }
+  );
+
+  return {
+    updatedOwnUser,
+    updatedUserToFollow,
+  };
+};

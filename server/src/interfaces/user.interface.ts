@@ -6,6 +6,8 @@ export interface User {
   email: string;
   password: string;
   age: number;
+  followers?: User[];
+  following?: User[];
 }
 
 export interface UserDoc extends Document, User {

@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { validateAndConvert } from "../middleware/validateAndConvert";
 import { CreateUserDto } from "../dto/user.dto";
-import { createUser, findUsers } from "../services/user.service";
+import { createUser, findUsers, followUser } from "../services/user.service";
 import { GeneralError } from "../interfaces/erros.interface";
 import { converDtoErrorToGeneralError } from "../utils/convertDtoErrorToGeneralError";
 import { auth } from "../middleware/auth";
@@ -25,6 +25,21 @@ router.get("/", auth, async (req: UserAuthRequest, res: Response) => {
   try {
     const users = await findUsers(req.user.id);
     return res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send({ errors: [{ message: "Server error" }] });
+  }
+});
+
+router.post("/follow/:userId", async (req: UserAuthRequest, res: Response) => {
+  try {
+    const userIdOfUserToFollow: string = req.params["userId"];
+    const updatedOwnUserAndUserToFollow = await followUser(
+      req.user.id,
+      userIdOfUserToFollow,
+      res
+    );
+    return res.json(updatedOwnUserAndUserToFollow);
   } catch (err) {
     console.error(err.message);
     res.status(500).send({ errors: [{ message: "Server error" }] });
