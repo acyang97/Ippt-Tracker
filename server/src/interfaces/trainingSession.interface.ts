@@ -32,4 +32,8 @@ export interface TrainingSessionDoc extends Document, TrainingSession {
   _id: Types.ObjectId;
 }
 
-export type HydratedTrainingSession = TrainingSession & User;
+export type HydratedTrainingSession = TrainingSession & {
+  name: string;
+  email: string;
+  age: number;
+};

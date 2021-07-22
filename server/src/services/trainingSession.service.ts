@@ -17,19 +17,22 @@ export const getAllTrainingSessions = async (): Promise<
     await Promise.all(
       trainingSessions.map(async (session) => {
         const userId = session.userId;
-        const user: User = await findUserById(userId);
+        const { name, email, age } = await findUserById(userId);
         return {
           ...session,
-          ...user,
+          name,
+          email,
+          age,
         };
       })
     );
+  // console.log(trainingSessionsAndUserInfo);
 
   trainingSessionsAndUserInfo.sort((sessionA, sessionB) => {
     if (sessionA.date < sessionB.date) {
-      return -1;
-    } else if (sessionA.date > sessionB.date) {
       return 1;
+    } else if (sessionA.date > sessionB.date) {
+      return -1;
     }
     return 0;
   });

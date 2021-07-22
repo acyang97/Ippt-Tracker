@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const AddTraining = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { createTraining } = bindActionCreators(
+  const { createTraining, initLoadTrainingSession } = bindActionCreators(
     trainingSessionActionCreators,
     dispatch
   );
@@ -56,6 +56,7 @@ const AddTraining = () => {
       return;
     }
     createTraining(pushUps, sitUps, runTiming);
+    initLoadTrainingSession();
   };
 
   return (

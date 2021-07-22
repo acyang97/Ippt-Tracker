@@ -15,6 +15,7 @@ export const initLoadTrainingSession =
     };
     try {
       const res = await axios.get("/ippt-tracker/training-session", config);
+      console.log(res);
       dispatch({
         type: TrainingSessionActionTypes.INIT_LOAD_TRAININGS_SUCCESS,
         payload: res.data,

@@ -8,6 +8,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import HomeIcon from "@material-ui/icons/Home";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { bindActionCreators } from "redux";
+import { trainingSessionActionCreators } from "../../action-creators";
 
 const drawerWidth = 240;
 
@@ -28,9 +31,17 @@ const useStyles = makeStyles((theme: Theme) =>
 const SideDrawer = () => {
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  const { initLoadTrainingSession } = bindActionCreators(
+    trainingSessionActionCreators,
+    dispatch
+  );
 
   const onHomeButtonClicked = (): void => {
     history.push("/home");
+    initLoadTrainingSession();
+    // need to do something to load the training sessions again after click on this
   };
 
   const onAddTrainingButtonClicked = (): void => {
