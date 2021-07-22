@@ -1,8 +1,8 @@
 import { UserActionTypes } from "../action-types/user.action-types";
-import { IUser } from "../interfaces/User.interface";
+import { IHydratedUser } from "../interfaces/User.interface";
 
 export interface UserState {
-  users: IUser[];
+  users: IHydratedUser[];
 }
 
 // to contain the list of user

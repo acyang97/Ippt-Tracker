@@ -31,19 +31,23 @@ router.get("/", auth, async (req: UserAuthRequest, res: Response) => {
   }
 });
 
-router.post("/follow/:userId", async (req: UserAuthRequest, res: Response) => {
-  try {
-    const userIdOfUserToFollow: string = req.params["userId"];
-    const updatedOwnUserAndUserToFollow = await followUser(
-      req.user.id,
-      userIdOfUserToFollow,
-      res
-    );
-    return res.json(updatedOwnUserAndUserToFollow);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send({ errors: [{ message: "Server error" }] });
+router.post(
+  "/follow/:userId",
+  auth,
+  async (req: UserAuthRequest, res: Response) => {
+    try {
+      const userIdOfUserToFollow: string = req.params["userId"];
+      const updatedOwnUserAndUserToFollow = await followUser(
+        req.user.id,
+        userIdOfUserToFollow,
+        res
+      );
+      return res.json(updatedOwnUserAndUserToFollow);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send({ errors: [{ message: "Server error" }] });
+    }
   }
-});
+);
 
 export default router;

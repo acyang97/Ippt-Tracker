@@ -5,3 +5,8 @@ export interface FindUsersAction {
   type: UserActionTypes.FIND_USERS;
   payload: IUser[];
 }
+
+export interface FollowUserAction {
+  type: UserActionTypes.FIND_USERS;
+  payload: { updatedOwnUser: IUser; updatedUserToFollow: IUser };
+}

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
@@ -9,11 +10,19 @@ import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
-import AddIcon from "@material-ui/icons/Add";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { IUser } from "../../interfaces/User.interface";
+import { IHydratedUser } from "../../interfaces/User.interface";
+import { Button } from "@material-ui/core";
+import { AuthState } from "../../interfaces/Auth.interface";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../reducers";
+import { useState } from "react";
+import { useEffect } from "react";
+import { isNil } from "lodash";
+import { bindActionCreators } from "redux";
+import { userActionCreators } from "../../action-creators";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -41,25 +50,49 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const UserCard = (props: { user: IUser }) => {
+const UserCard = (props: { user: IHydratedUser }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-
+  const authState: AuthState = useSelector((state: RootState) => state.auth);
+  // const userState: UserState = useSelector((state: RootState) => state.user);
+  const [following, setFollowing] = useState(false);
+  const dispatch = useDispatch();
+  const { followUser } = bindActionCreators(userActionCreators, dispatch);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
-  const { name, age } = props.user;
+  useEffect(() => {
+    console.log(
+      props.user.followersListOfUser.followers.find(
+        (u) => u._id === authState.user?._id
+      )
+    );
+    if (
+      props.user.followersListOfUser.followers.find(
+        (u) => u._id === authState.user?._id
+      )
+    ) {
+      setFollowing(true);
+    }
+  }, []);
+
+  // need a useEffect fo find out if the user already
+
+  const { name, age, _id: idOfUser } = props.user;
 
   // create the function to follow user
-  const followSelectedUser = () => {};
+  const followSelectedUser = () => {
+    followUser(idOfUser);
+    setFollowing(true);
+  };
 
   return (
     <Card className={classes.root}>
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
-            {name[0].toUpperCase()}
+            {!isNil(name) && name[0].toUpperCase()}
           </Avatar>
         }
         action={
@@ -78,9 +111,14 @@ const UserCard = (props: { user: IUser }) => {
         ></Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="Follow" onClick={followSelectedUser}>
-          <AddIcon />
-        </IconButton>
+        <Button
+          variant="contained"
+          color={following ? "secondary" : "primary"}
+          disabled={following}
+          onClick={followSelectedUser}
+        >
+          {following ? "Followed" : "Follow"}
+        </Button>
         <IconButton aria-label="share">
           <ShareIcon />
         </IconButton>

@@ -3,7 +3,17 @@ import UserModel from "../models/User.schema";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import config from "config";
-import { User } from "../interfaces/user.interface";
+import { User, UserDoc } from "../interfaces/user.interface";
+import {
+  addNewUserToFollowingList,
+  createNewFollowingDocOnUserRegister,
+  getFollowingListByUserId,
+} from "./following.service";
+import {
+  addNewUserToFollowersList,
+  createNewFollowersDocOnUserRegister,
+  getFollowersListByUserId,
+} from "./followers.service";
 
 export const createUser = async (
   name: string,
@@ -27,15 +37,14 @@ export const createUser = async (
         ],
       });
     }
-    const followers: User[] = [];
-    const following: User[] = [];
-    user = new UserModel({ name, email, age, password, followers, following });
-
+    user = new UserModel({ name, email, age, password });
     // encrypt the password
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password.toString(), salt);
 
-    await user.save();
+    const createdUser = await user.save();
+    await createNewFollowingDocOnUserRegister(String(createdUser._id), res);
+    await createNewFollowersDocOnUserRegister(String(createdUser._id), res);
 
     const payload = {
       user: {
@@ -62,64 +71,114 @@ export const findUserById = (userId: string): Promise<User> => {
   return UserModel.findById(userId).lean().exec();
 };
 
-export const findUsers = (userId: string): Promise<User[]> => {
-  return UserModel.find({
+export const findUsers = async (userId: string): Promise<any> => {
+  const users: UserDoc[] = await UserModel.find({
     // don't want to return own user
     _id: { $ne: userId },
-  })
-    .sort({ name: 1 })
-    .lean()
-    .exec();
+  }).sort({ name: 1 });
+  let hydratedList: any = [];
+  await Promise.all(
+    users.map(async (user) => {
+      const id = user._id;
+      const followersListOfUser = await getFollowersListByUserId(String(id));
+      const followingListOfUser = await getFollowingListByUserId(String(id));
+      hydratedList.push({
+        _id: user._id,
+        name: user.name,
+        age: user.age,
+        email: user.email,
+        followersListOfUser,
+        followingListOfUser,
+      });
+    })
+  );
+  console.log("hydratedList", hydratedList);
+  return hydratedList;
 };
 
 // Need to update the schema to do this thing
+// export const followUser = async (
+//   ownUserId: string,
+//   userIdOfUserToFollow: string,
+//   res: Response
+// ) => {
+//   const userToFollow = await findUserById(userIdOfUserToFollow);
+//   const ownUser = await findUserById(ownUserId);
+//   const listOfFollowers: User[] = userToFollow.followers;
+//   if (listOfFollowers.find((user) => user.email === ownUser.email)) {
+//     return res
+//       .status(400)
+//       .send({ errors: [{ message: `Already followed ${userToFollow.name}` }] });
+//   }
+//   if (ownUser.following.find((user) => user.email === userToFollow.email)) {
+//     return res
+//       .status(400)
+//       .send({ errors: [{ message: `Already followed ${userToFollow.name}` }] });
+//   }
+
+//   let newFollowingForOwnUser = ownUser.following;
+//   newFollowingForOwnUser.push(userToFollow);
+
+//   const updatedOwnUser: User = await UserModel.findOneAndUpdate(
+//     { _id: ownUserId },
+//     {
+//       $set: {
+//         following: newFollowingForOwnUser,
+//       },
+//     },
+//     { new: true }
+//   );
+//   console.log("here1");
+
+//   let newFollowersForOtherUser = userToFollow.followers;
+//   newFollowersForOtherUser.push(ownUser);
+//   const updatedUserToFollow = await UserModel.findOneAndUpdate(
+//     { _id: userIdOfUserToFollow },
+//     {
+//       $set: {
+//         followers: newFollowersForOtherUser,
+//       },
+//     },
+//     { new: true }
+//   );
+//   console.log("here2");
+//   return {
+//     updatedOwnUser,
+//     updatedUserToFollow,
+//   };
+// };
+
 export const followUser = async (
   ownUserId: string,
   userIdOfUserToFollow: string,
   res: Response
 ) => {
+  const followersListOfUserToFollow = await getFollowersListByUserId(
+    userIdOfUserToFollow
+  );
+  const followingListOfUser = await getFollowingListByUserId(ownUserId);
   const userToFollow = await findUserById(userIdOfUserToFollow);
   const ownUser = await findUserById(ownUserId);
-  const listOfFollowers: User[] = userToFollow.followers;
-  if (listOfFollowers.find((user) => user.email === ownUser.email)) {
+  if (
+    followersListOfUserToFollow.followers.find(
+      (user) => user.email === ownUser.email
+    )
+  ) {
     return res
       .status(400)
       .send({ errors: [{ message: `Already followed ${userToFollow.name}` }] });
   }
-  if (ownUser.following.find((user) => user.email === userToFollow.email)) {
+  if (
+    followingListOfUser.following.find(
+      (user) => user.email === userToFollow.email
+    )
+  ) {
     return res
       .status(400)
       .send({ errors: [{ message: `Already followed ${userToFollow.name}` }] });
   }
-
-  let newFollowingForOwnUser = ownUser.following;
-  newFollowingForOwnUser.push(userToFollow);
-
-  const updatedOwnUser: User = await UserModel.findOneAndUpdate(
-    { _id: ownUserId },
-    {
-      $set: {
-        following: newFollowingForOwnUser,
-      },
-    },
-    { new: true }
-  );
-
-  let newFollowersForOtherUser = userToFollow.followers;
-  newFollowersForOtherUser.push(ownUser);
-
-  const updatedUserToFollow = await UserModel.findOneAndUpdate(
-    { _id: userIdOfUserToFollow },
-    {
-      $set: {
-        followers: newFollowersForOtherUser,
-      },
-    },
-    { new: true }
-  );
-
-  return {
-    updatedOwnUser,
-    updatedUserToFollow,
-  };
+  console.log("before update");
+  await addNewUserToFollowersList(userIdOfUserToFollow, ownUser);
+  await addNewUserToFollowingList(ownUserId, userToFollow);
+  console.log("end");
 };
