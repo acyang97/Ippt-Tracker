@@ -48,6 +48,10 @@ const SideDrawer = () => {
     history.push("/add-training");
   };
 
+  const onFindUsersButtonClicked = (): void => {
+    history.push("/find-users");
+  };
+
   return (
     <Drawer
       className={classes.drawer}
@@ -71,6 +75,12 @@ const SideDrawer = () => {
             <FavoriteIcon />
           </ListItemIcon>
           <ListItemText primary={"Add Training"} />
+        </ListItem>
+        <ListItem button key={"findUsers"} onClick={onFindUsersButtonClicked}>
+          <ListItemIcon>
+            <FavoriteIcon />
+          </ListItemIcon>
+          <ListItemText primary={"Find Users"} />
         </ListItem>
       </List>
       <Divider />
