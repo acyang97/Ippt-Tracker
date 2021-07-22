@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import AlertComponent from "../alerts/AlertComponent";
 import { UserState } from "../../reducers/user";
 import { RootState } from "../../reducers";
+import { Grid } from "@material-ui/core";
+import UserCard from "./UserCard";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,7 +32,12 @@ const useStyles = makeStyles((theme: Theme) =>
     submit: {
       margin: theme.spacing(3, 0, 2),
     },
-    timeField: {},
+    rootForList: {
+      display: "flex",
+      // flexWrap: "wrap",
+      justifyContent: "space-around",
+      overflow: "hidden",
+    },
   })
 );
 
@@ -43,6 +50,7 @@ const FindUsers = () => {
 
   useEffect(() => {
     findUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -54,13 +62,14 @@ const FindUsers = () => {
         <div className={classes.toolbar} />
         <AlertComponent />
         <Typography paragraph>Find other Users</Typography>
-        {users.map((user) => (
-          <div key={user._id}>
-            <div>{user.name}</div>
-            <div>{user.age}</div>
-            <div>{user.email}</div>
-          </div>
-        ))}
+
+        <Grid container spacing={3}>
+          {users.map((user) => (
+            <Grid item xs={12} sm={12} md={4} lg={4} key={user._id}>
+              <UserCard user={user} />
+            </Grid>
+          ))}
+        </Grid>
       </main>
     </div>
   );

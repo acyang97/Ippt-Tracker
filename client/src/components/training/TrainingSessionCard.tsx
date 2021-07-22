@@ -53,7 +53,9 @@ const TrainingSessionCard = (props: {
   };
 
   const {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     comments,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     likes,
     pushUps,
     sitUps,
