@@ -4,14 +4,11 @@ import { validateAndConvert } from "../middleware/validateAndConvert";
 import { loginUser } from "../services/auth.service";
 import { auth } from "../middleware/auth";
 import UserModel from "../models/User.schema";
-import { UserDoc } from "../interfaces/user.interface";
+import { UserAuthRequest, UserDoc } from "../interfaces/user.interface";
 import { AuthError } from "../interfaces/erros.interface";
 
 const router = express.Router();
 
-interface UserAuthRequest extends Request {
-  user: UserDoc;
-}
 // @route  GET ippt-tracker/auth;
 // @desc   TEST route
 // @access private
@@ -23,7 +20,7 @@ router.get("/", auth, async (req: UserAuthRequest, res: Response) => {
     res.json(user);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("server error");
+    res.status(500).send({ errors: [{ message: "Server error" }] });
   }
 });
 

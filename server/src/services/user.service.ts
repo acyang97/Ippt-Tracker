@@ -59,3 +59,16 @@ export const createUser = async (
 export const findUserById = (userId: string): Promise<User> => {
   return UserModel.findById(userId).lean().exec();
 };
+
+export const findUsers = (userId: string): Promise<User[]> => {
+  return UserModel.find({
+    // don't want to return own user
+    _id: { $ne: userId },
+  })
+    .sort({ name: 1 })
+    .lean()
+    .exec();
+};
+
+// Need to update the schema to do this thing
+export const followUser = (ownUserId: string, userToFollowUserId: string) => {};
