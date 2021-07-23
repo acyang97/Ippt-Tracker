@@ -13,3 +13,11 @@ Also have a branch to get started with a sample project with all the authenticat
 - How to authenticate using JWT tokens, on both the frontend and backend
 - NestJS is nicer than Express since it give nicer structure
 - Plan properly first before deciding if I really need to use Redux for something. Not everything needs to use the Redux store.
+
+## How to view
+
+- clone the repo
+- go to the server folder and run `npm install`
+- go to the client folder and run `npm install`
+- in the server dir, run `npm run start`
+- in the client dir, run `npm start`
