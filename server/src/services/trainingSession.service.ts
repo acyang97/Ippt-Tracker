@@ -1,5 +1,8 @@
 import { TrainingSessionModel } from "../models/TrainingSession.schema";
-import { HydratedTrainingSession } from "../interfaces/trainingSession.interface";
+import {
+  HydratedTrainingSession,
+  TrainingSession,
+} from "../interfaces/trainingSession.interface";
 import { User } from "../interfaces/user.interface";
 import { findUserById } from "./user.service";
 
@@ -37,4 +40,19 @@ export const getAllTrainingSessions = async (): Promise<
     return 0;
   });
   return trainingSessionsAndUserInfo;
+};
+
+export const likeTrainingSessionByUser = async (
+  trainingSessionId: string,
+  userId: string
+): Promise<TrainingSession> => {
+  const user: User = await findUserById(userId);
+  const updatedTrainingSession = await TrainingSessionModel.findOneAndUpdate(
+    { _id: trainingSessionId },
+    { $push: { likes: user } },
+    { new: true }
+  )
+    .lean()
+    .exec();
+  return updatedTrainingSession;
 };

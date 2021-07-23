@@ -15,6 +15,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { IHydratedUser } from "../../interfaces/User.interface";
 import { Button } from "@material-ui/core";
+import Tooltip from "@material-ui/core/Tooltip";
 import { AuthState } from "../../interfaces/Auth.interface";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers";
@@ -82,9 +83,15 @@ const UserCard = (props: { user: IHydratedUser }) => {
   const { name, age, _id: idOfUser } = props.user;
 
   // create the function to follow user
-  const followSelectedUser = () => {
-    followUser(idOfUser);
-    setFollowing(true);
+  const followOrUnfollowSelectedUser = () => {
+    if (!following) {
+      followUser(idOfUser);
+      setFollowing(true);
+    } else {
+      // unfollow the user
+      // setfollowing to false
+      setFollowing(false);
+    }
   };
 
   return (
@@ -111,14 +118,19 @@ const UserCard = (props: { user: IHydratedUser }) => {
         ></Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Button
-          variant="contained"
-          color={following ? "secondary" : "primary"}
-          disabled={following}
-          onClick={followSelectedUser}
+        <Tooltip
+          disableFocusListener
+          title={following ? "Unfollow User" : "Follow User"}
         >
-          {following ? "Followed" : "Follow"}
-        </Button>
+          <Button
+            variant="contained"
+            color={following ? "secondary" : "primary"}
+            // disabled={following}
+            onClick={followOrUnfollowSelectedUser}
+          >
+            {following ? "Followed" : "Follow"}
+          </Button>
+        </Tooltip>
         <IconButton aria-label="share">
           <ShareIcon />
         </IconButton>

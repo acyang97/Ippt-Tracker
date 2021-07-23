@@ -33,3 +33,17 @@ export const addNewUserToFollowersList = async (
     .lean()
     .exec();
 };
+
+export const removeUserFromFollowersList = async (
+  userId: string,
+  userThatUnfollowed: User
+): Promise<void> => {
+  await FollowersModel.findOneAndUpdate(
+    { userId },
+    {
+      $pull: { followers: { $elemMatch: { email: userThatUnfollowed.email } } },
+    }
+  )
+    .lean()
+    .exec();
+};

@@ -8,11 +8,13 @@ import {
   addNewUserToFollowingList,
   createNewFollowingDocOnUserRegister,
   getFollowingListByUserId,
+  removeUserToFollowingList,
 } from "./following.service";
 import {
   addNewUserToFollowersList,
   createNewFollowersDocOnUserRegister,
   getFollowersListByUserId,
+  removeUserFromFollowersList,
 } from "./followers.service";
 
 export const createUser = async (
@@ -177,8 +179,39 @@ export const followUser = async (
       .status(400)
       .send({ errors: [{ message: `Already followed ${userToFollow.name}` }] });
   }
-  console.log("before update");
   await addNewUserToFollowersList(userIdOfUserToFollow, ownUser);
   await addNewUserToFollowingList(ownUserId, userToFollow);
-  console.log("end");
+};
+
+export const unfollowUser = async (
+  ownUserId: string,
+  userIdOfUserToUnfollow: string,
+  res: Response
+) => {
+  const followersListOfUserToUnfollow = await getFollowersListByUserId(
+    userIdOfUserToUnfollow
+  );
+  const followingListOfUser = await getFollowingListByUserId(ownUserId);
+  const userToUnfollow = await findUserById(userIdOfUserToUnfollow);
+  const ownUser = await findUserById(ownUserId);
+  if (
+    !followersListOfUserToUnfollow.followers.find(
+      (user) => user.email === ownUser.email
+    )
+  ) {
+    return res
+      .status(400)
+      .send({ errors: [{ message: `Never even follow this user, weird...` }] });
+  }
+  if (
+    followingListOfUser.following.find(
+      (user) => user.email === userToUnfollow.email
+    )
+  ) {
+    return res
+      .status(400)
+      .send({ errors: [{ message: `Never even follow this user, weird...` }] });
+  }
+  await removeUserFromFollowersList(userIdOfUserToUnfollow, ownUser);
+  await removeUserToFollowingList(ownUserId, userToUnfollow);
 };

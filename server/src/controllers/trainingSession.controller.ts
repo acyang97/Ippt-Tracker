@@ -12,7 +12,10 @@ import { CreateTrainingSessionDto } from "../dto/trainingSession.dto";
 import { GeneralError } from "../interfaces/erros.interface";
 import { converDtoErrorToGeneralError } from "../utils/convertDtoErrorToGeneralError";
 import { calculatePoints } from "../utils/calculateIpptPoints";
-import { getAllTrainingSessions } from "../services/trainingSession.service";
+import {
+  getAllTrainingSessions,
+  likeTrainingSessionByUser,
+} from "../services/trainingSession.service";
 
 const router = express.Router();
 
@@ -95,5 +98,22 @@ router.post("/create", auth, async (req: UserRequest, res: Response) => {
     res.status(500).send({ errors: [{ message: "Server error" }] });
   }
 });
+
+router.put(
+  "/like/:trainingSessionId",
+  auth,
+  async (req: UserRequest, res: Response) => {
+    try {
+      // userId in the params is the target userId
+      const idOfTrainingSessionToLike = req.params["trainingSessionId"];
+      const updatedTrainingSession: TrainingSession =
+        await likeTrainingSessionByUser(idOfTrainingSessionToLike, req.user.id);
+      res.json(updatedTrainingSession);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send({ errors: [{ message: "Server error" }] });
+    }
+  }
+);
 
 export default router;
