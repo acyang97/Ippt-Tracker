@@ -6,3 +6,10 @@ to keep track of my trainings to see my progress.
 Instead of creating a tracker for the own user, I created features to allow users to follow friends
 so that they can check out each other's progress too. Something similar to Twitter, but for a more specific use case.
 Also have a branch to get started with a sample project with all the authentications features set up.
+
+## What I've learnt from this
+
+- TypeScript > Javascript anytime, anyday...
+- How to authenticate using JWT tokens, on both the frontend and backend
+- NestJS is nicer than Express since it give nicer structure
+- Plan properly first before deciding if I really need to use Redux for something. Not everything needs to use the Redux store.
