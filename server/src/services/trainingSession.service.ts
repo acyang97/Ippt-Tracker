@@ -1,3 +1,4 @@
+import { Response } from "express";
 import { TrainingSessionModel } from "../models/TrainingSession.schema";
 import {
   HydratedTrainingSession,
@@ -44,9 +45,24 @@ export const getAllTrainingSessions = async (): Promise<
 
 export const likeTrainingSessionByUser = async (
   trainingSessionId: string,
-  userId: string
-): Promise<TrainingSession> => {
+  userId: string,
+  res: Response
+) => {
   const user: User = await findUserById(userId);
+  const trainingSessionToLike = await TrainingSessionModel.findOne({
+    _id: trainingSessionId,
+  })
+    .lean()
+    .exec();
+  if (
+    trainingSessionToLike.likes.filter(
+      (userThatLiked) => userThatLiked.email === user.email
+    )
+  ) {
+    return res
+      .status(400)
+      .send({ errors: [{ message: "User already like this post" }] });
+  }
   const updatedTrainingSession = await TrainingSessionModel.findOneAndUpdate(
     { _id: trainingSessionId },
     { $push: { likes: user } },

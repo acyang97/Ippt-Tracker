@@ -106,8 +106,11 @@ router.put(
     try {
       // userId in the params is the target userId
       const idOfTrainingSessionToLike = req.params["trainingSessionId"];
-      const updatedTrainingSession: TrainingSession =
-        await likeTrainingSessionByUser(idOfTrainingSessionToLike, req.user.id);
+      const updatedTrainingSession = await likeTrainingSessionByUser(
+        idOfTrainingSessionToLike,
+        req.user.id,
+        res
+      );
       res.json(updatedTrainingSession);
     } catch (err) {
       console.error(err.message);
