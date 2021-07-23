@@ -1,7 +1,4 @@
-# Plan
+# IPPT Tracker
 
-THURS
-
-- ALLOW SEARCH USERS AND ADD AS FRIEND
-  - MIGHT NEED TO ADD A FRINED OBJECT OR SMT
-- CREATE LIKE AND COMMENT LOGIC
+Created a full stack application to track IPPT Trainings using TypeScript, React and Express.
+Also have a branch to get started with a sample project with all the authentications features set up.
